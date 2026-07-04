@@ -109,8 +109,12 @@
   const lightbox = document.getElementById('lightbox');
 const lightboxFrame = document.getElementById('lightbox-frame');
 function openLightbox(url) {
-  lightboxFrame.innerHTML = `<iframe src="${url}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  lightboxFrame.innerHTML = `<iframe id="active-embed" src="${url}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
   lightbox.classList.add('open');
+  try {
+    if (lightbox.requestFullscreen) lightbox.requestFullscreen().catch(() => {});
+    else if (lightbox.webkitRequestFullscreen) lightbox.webkitRequestFullscreen();
+  } catch (e) { /* fullscreen not available, modal still works fine */ }
 }
 function closeLightbox() {
   lightbox.classList.remove('open');
@@ -118,6 +122,9 @@ function closeLightbox() {
 }
 document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement && lightbox.classList.contains('open')) closeLightbox();
+});
 
 function getEmbedUrl(link) {
     let m = link.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
