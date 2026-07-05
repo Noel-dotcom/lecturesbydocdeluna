@@ -22,7 +22,6 @@
   .exit{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);text-decoration:none;border:1px solid var(--line-strong);padding:8px 14px;border-radius:6px;}
   .exit:hover{color:var(--ink);border-color:var(--ink);}
 
-  /* upload card, styled like a studio "new upload" tile */
   .upload-card{
     background:var(--card);border:1px solid var(--line);border-radius:14px;
     padding:0;margin-bottom:48px;overflow:hidden;
@@ -71,7 +70,6 @@
   .status{font-family:'JetBrains Mono',monospace;font-size:12px;padding:0 32px 20px;color:var(--brass);display:none;}
   .status.err{color:var(--red);}
 
-  /* content table */
   .section-title{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:0 0 16px;}
   table{width:100%;border-collapse:collapse;}
   thead th{
@@ -91,6 +89,18 @@
   .date-cell{color:var(--faint);font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap;}
   .del{background:none;border:1px solid var(--line-strong);color:var(--faint);cursor:pointer;font-size:12px;padding:7px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;}
   .del:hover{color:var(--red);border-color:var(--red);}
+  .edit-btn:hover{color:var(--brass);border-color:var(--brass-dim);}
+
+  .order-cell{display:flex;flex-direction:column;gap:2px;align-items:center;}
+  .order-btn{
+    background:none;border:1px solid var(--line-strong);color:var(--muted);
+    width:26px;height:22px;border-radius:5px;cursor:pointer;font-size:11px;
+    display:flex;align-items:center;justify-content:center;line-height:1;
+  }
+  .order-btn:hover{color:var(--brass);border-color:var(--brass-dim);}
+  .order-btn:disabled{opacity:0.25;cursor:not-allowed;}
+
+  .row-actions{display:flex;gap:6px;flex-wrap:wrap;}
 
   .empty{text-align:center;padding:60px 20px;color:var(--faint);}
   .empty p{font-size:14px;}
@@ -108,8 +118,8 @@
 
   <div class="upload-card">
     <div class="drop">
-      <div class="icon">&#9660;</div>
-      <h2>Paste a video link</h2>
+      <div class="icon" id="mode-icon">&#9660;</div>
+      <h2 id="mode-title">Paste a video link</h2>
       <p>Google Drive share link, YouTube, or Vimeo. No file upload needed.</p>
       <input class="linkfield" id="f-link" type="text" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
       <div class="hint">Google Drive files must be shared as "Anyone with the link" to play for viewers.</div>
@@ -136,7 +146,7 @@
   <div class="section-title">Published sessions (<span id="count">0</span>)</div>
   <table id="table" style="display:none;">
     <thead>
-      <tr><th style="width:110px;">Preview</th><th>Session</th><th style="width:110px;">Date</th><th style="width:90px;"></th></tr>
+      <tr><th style="width:56px;"></th><th style="width:110px;">Preview</th><th>Session</th><th style="width:100px;">Date</th><th style="width:120px;"></th></tr>
     </thead>
     <tbody id="table-body"></tbody>
   </table>
@@ -149,10 +159,10 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getFirestore, collection, query, orderBy, onSnapshot,
-    addDoc, deleteDoc, doc, serverTimestamp
+    addDoc, updateDoc, deleteDoc, doc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ---- PASTE YOUR FIREBASE CONFIG HERE (same object as index.html) ----
+  // ---- YOUR FIREBASE CONFIG (same object as index.html) ----
   const firebaseConfig = {
     apiKey: "AIzaSyBqY1FRLKIju8-DS04DQBiT9HBL0pkVbiY",
     authDomain: "lecturesbydocd.firebaseapp.com",
@@ -161,7 +171,7 @@
     messagingSenderId: "259922970808",
     appId: "1:259922970808:web:ff73c6a6f8cc813fd78c4d"
   };
-  // ----------------------------------------------------------------
+  // ------------------------------------------------------
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -187,6 +197,9 @@
     if (!isErr) setTimeout(() => { statusEl.style.display = 'none'; }, 2500);
   }
 
+  let editingId = null;
+  let currentList = []; // sorted array of {id, ...data}
+
   document.getElementById('save-btn').addEventListener('click', async () => {
     const title = document.getElementById('f-title').value.trim();
     const link = document.getElementById('f-link').value.trim();
@@ -196,51 +209,134 @@
     const btn = document.getElementById('save-btn');
     btn.disabled = true;
     try {
-      await addDoc(collection(db, "lectures"), { title, link, note, date: serverTimestamp() });
-      document.getElementById('f-title').value = '';
-      document.getElementById('f-link').value = '';
-      document.getElementById('f-note').value = '';
-      showStatus('Published — now live on the public page.', false);
+      if (editingId) {
+        await updateDoc(doc(db, "lectures", editingId), { title, link, note });
+        showStatus('Changes saved.', false);
+      } else {
+        const maxOrder = currentList.reduce((m, d) => Math.max(m, d.order ?? 0), 0);
+        await addDoc(collection(db, "lectures"), { title, link, note, order: maxOrder + 1, date: serverTimestamp() });
+        showStatus('Published — now live on the public page.', false);
+      }
+      exitEditMode();
     } catch (e) {
       console.error(e);
-      showStatus('Could not publish — check the Firebase config at the top of this file.', true);
+      showStatus('Could not save — check the Firebase config at the top of this file.', true);
     }
     btn.disabled = false;
   });
 
-  document.getElementById('clear-btn').addEventListener('click', () => {
+  function enterEditMode(id, l) {
+    editingId = id;
+    document.getElementById('f-title').value = l.title || '';
+    document.getElementById('f-link').value = l.link || '';
+    document.getElementById('f-note').value = l.note || '';
+    document.getElementById('save-btn').textContent = 'Save changes';
+    document.getElementById('clear-btn').textContent = 'Cancel edit';
+    document.getElementById('mode-title').textContent = 'Editing session';
+    document.getElementById('mode-icon').innerHTML = '&#9998;';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function exitEditMode() {
+    editingId = null;
     document.getElementById('f-title').value = '';
     document.getElementById('f-link').value = '';
     document.getElementById('f-note').value = '';
-  });
+    document.getElementById('save-btn').textContent = 'Publish';
+    document.getElementById('clear-btn').textContent = 'Clear';
+    document.getElementById('mode-title').textContent = 'Paste a video link';
+    document.getElementById('mode-icon').innerHTML = '&#9660;';
+  }
+
+  document.getElementById('clear-btn').addEventListener('click', exitEditMode);
+
+  async function moveItem(id, direction) {
+    const idx = currentList.findIndex(d => d.id === id);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= currentList.length) return;
+    const a = currentList[idx], b = currentList[swapIdx];
+    const aOrder = a.order ?? 0, bOrder = b.order ?? 0;
+    try {
+      await Promise.all([
+        updateDoc(doc(db, "lectures", a.id), { order: bOrder }),
+        updateDoc(doc(db, "lectures", b.id), { order: aOrder })
+      ]);
+    } catch (e) {
+      console.error(e);
+      showStatus('Could not reorder — check the Firebase config.', true);
+    }
+  }
 
   const tableBody = document.getElementById('table-body');
   const table = document.getElementById('table');
   const emptyEl = document.getElementById('empty');
   const countEl = document.getElementById('count');
 
+  // Query by date so every doc always comes back (order field may not exist yet on old docs)
   const q = query(collection(db, "lectures"), orderBy("date", "desc"));
-  onSnapshot(q, (snap) => {
+  onSnapshot(q, async (snap) => {
     countEl.textContent = snap.size;
-    if (snap.empty) { table.style.display = 'none'; emptyEl.style.display = 'block'; return; }
+    if (snap.empty) { table.style.display = 'none'; emptyEl.style.display = 'block'; currentList = []; return; }
     table.style.display = 'table'; emptyEl.style.display = 'none';
 
-    tableBody.innerHTML = snap.docs.map(d => {
-      const l = d.data();
+    let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    // One-time backfill: assign an 'order' field to any doc missing one,
+    // based on its current date-desc position, so reordering has something to work with.
+    const missingOrder = docs.filter(d => d.order === undefined);
+    if (missingOrder.length > 0) {
+      const n = docs.length;
+      docs.forEach((d, i) => {
+        if (d.order === undefined) {
+          updateDoc(doc(db, "lectures", d.id), { order: n - i }).catch(() => {});
+        }
+      });
+    }
+
+    // Sort by order (descending = newest/top first); stable sort keeps date order for ties/missing values
+    docs.sort((a, b) => {
+      const oa = a.order, ob = b.order;
+      if (oa != null && ob != null) return ob - oa;
+      return 0;
+    });
+
+    currentList = docs;
+
+    tableBody.innerHTML = docs.map((l, i) => {
       const thumb = getThumbnail(l.link);
       return `
         <tr>
+          <td>
+            <div class="order-cell">
+              <button class="order-btn" data-move="up" data-id="${l.id}" ${i === 0 ? 'disabled' : ''}>&#9650;</button>
+              <button class="order-btn" data-move="down" data-id="${l.id}" ${i === docs.length - 1 ? 'disabled' : ''}>&#9660;</button>
+            </div>
+          </td>
           <td><div class="thumb">${thumb ? `<img src="${thumb}" alt="">` : '&#9654;'}</div></td>
           <td class="title-cell"><h4>${escapeHtml(l.title)}</h4><div class="sub">${l.note ? escapeHtml(l.note).slice(0,60) : 'No description'}</div></td>
           <td class="date-cell">${formatDate(l.date)}</td>
-          <td><button class="del" data-id="${d.id}">Remove</button></td>
+          <td>
+            <div class="row-actions">
+              <button class="del edit-btn" data-id="${l.id}" data-title="${escapeHtml(l.title)}" data-link="${escapeHtml(l.link)}" data-note="${escapeHtml(l.note || '')}">Edit</button>
+              <button class="del remove-btn" data-id="${l.id}">Remove</button>
+            </div>
+          </td>
         </tr>
       `;
     }).join('');
 
-    tableBody.querySelectorAll('.del').forEach(btn => {
+    tableBody.querySelectorAll('.order-btn').forEach(btn => {
+      btn.addEventListener('click', () => moveItem(btn.dataset.id, btn.dataset.move));
+    });
+    tableBody.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        enterEditMode(btn.dataset.id, { title: btn.dataset.title, link: btn.dataset.link, note: btn.dataset.note });
+      });
+    });
+    tableBody.querySelectorAll('.remove-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         if (!confirm('Remove this session?')) return;
+        if (btn.dataset.id === editingId) exitEditMode();
         await deleteDoc(doc(db, "lectures", btn.dataset.id));
       });
     });
