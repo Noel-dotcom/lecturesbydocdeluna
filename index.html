@@ -153,6 +153,11 @@ function getEmbedUrl(link) {
     if (snap.empty) { logEl.innerHTML = ''; emptyEl.style.display = 'block'; return; }
     emptyEl.style.display = 'none';
     const docs = snap.docs.map(d => d.data());
+    docs.sort((a, b) => {
+      const oa = a.order, ob = b.order;
+      if (oa != null && ob != null) return ob - oa;
+      return 0;
+    });
     logEl.innerHTML = docs.map((l, i) => {
       const numStr = String(docs.length - i).padStart(2, '0');
       const embedUrl = getEmbedUrl(l.link);
