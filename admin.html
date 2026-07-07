@@ -12,7 +12,7 @@
     --red:#c96b6b;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',sans-serif;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:860px;margin:0 auto;padding:48px 24px 120px;}
   a{color:inherit;}
 
@@ -22,41 +22,28 @@
   .exit{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);text-decoration:none;border:1px solid var(--line-strong);padding:8px 14px;border-radius:6px;}
   .exit:hover{color:var(--ink);border-color:var(--ink);}
 
-  .upload-card{
-    background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:0;margin-bottom:48px;overflow:hidden;
-  }
-  .drop{
-    padding:44px 32px;text-align:center;border-bottom:1px solid var(--line);
-    background:
-      repeating-linear-gradient(90deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) top / 100% 1px no-repeat,
-      repeating-linear-gradient(90deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) bottom / 100% 1px no-repeat,
-      repeating-linear-gradient(0deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) left / 1px 100% no-repeat,
-      repeating-linear-gradient(0deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) right / 1px 100% no-repeat;
-    margin:20px;border-radius:10px;
-  }
-  .drop .icon{
-    width:56px;height:56px;margin:0 auto 18px;border-radius:50%;
-    background:rgba(201,168,107,0.1);display:flex;align-items:center;justify-content:center;
-    color:var(--brass);font-size:24px;
-  }
+  .tabs{display:flex;gap:8px;margin-bottom:32px;border-bottom:1px solid var(--line);}
+  .tab-btn{font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px 24px;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;}
+  .tab-btn.active{color:var(--ink);border-bottom:3px solid var(--brass);}
+
+  .upload-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;margin-bottom:48px;overflow:hidden;}
+  .drop{padding:44px 32px;text-align:center;border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(90deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) top / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) bottom / 100% 1px no-repeat,
+    repeating-linear-gradient(0deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) left / 1px 100% no-repeat,
+    repeating-linear-gradient(0deg, transparent, transparent 9px, var(--line-strong) 9px, var(--line-strong) 10px) right / 1px 100% no-repeat;
+    margin:20px;border-radius:10px;}
+  .drop .icon{width:56px;height:56px;margin:0 auto 18px;border-radius:50%;background:rgba(201,168,107,0.1);display:flex;align-items:center;justify-content:center;color:var(--brass);font-size:24px;}
   .drop h2{font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0 0 6px;}
   .drop p{color:var(--muted);font-size:13.5px;margin:0 0 20px;}
-  .drop input.linkfield{
-    width:100%;max-width:440px;background:#101318;border:1px solid var(--line-strong);
-    color:var(--ink);padding:12px 14px;border-radius:8px;font-size:14px;
-    font-family:'JetBrains Mono',monospace;text-align:left;
-  }
+  .drop input.linkfield{width:100%;max-width:440px;background:#101318;border:1px solid var(--line-strong);color:var(--ink);padding:12px 14px;border-radius:8px;font-size:14px;font-family:'JetBrains Mono',monospace;}
   .drop input.linkfield:focus{outline:none;border-color:var(--brass-dim);}
   .hint{color:var(--faint);font-size:12px;margin-top:10px;}
 
   .details{padding:8px 32px 32px;}
   .field{margin-bottom:16px;}
   .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:0.02em;}
-  .field input, .field textarea{
-    width:100%;background:#101318;border:1px solid var(--line-strong);color:var(--ink);
-    padding:11px 13px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;
-  }
+  .field input, .field textarea{width:100%;background:#101318;border:1px solid var(--line-strong);color:var(--ink);padding:11px 13px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;}
   .field input:focus, .field textarea:focus{outline:none;border-color:var(--brass-dim);}
   .field textarea{resize:vertical;min-height:70px;}
 
@@ -72,17 +59,10 @@
 
   .section-title{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:0 0 16px;}
   table{width:100%;border-collapse:collapse;}
-  thead th{
-    text-align:left;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);
-    text-transform:uppercase;letter-spacing:0.06em;padding:0 12px 10px;border-bottom:1px solid var(--line-strong);
-  }
+  thead th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:0.06em;padding:0 12px 10px;border-bottom:1px solid var(--line-strong);}
   tbody tr{border-bottom:1px solid var(--line);}
   tbody td{padding:14px 12px;vertical-align:middle;}
-  .thumb{
-    width:96px;height:54px;border-radius:6px;background:var(--card2);
-    display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--faint);font-size:18px;
-    border:1px solid var(--line);
-  }
+  .thumb{width:96px;height:54px;border-radius:6px;background:var(--card2);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--faint);font-size:18px;border:1px solid var(--line);}
   .thumb img{width:100%;height:100%;object-fit:cover;}
   .title-cell h4{margin:0 0 4px;font-family:'Fraunces',serif;font-weight:600;font-size:15px;}
   .title-cell .sub{color:var(--muted);font-size:12.5px;}
@@ -92,18 +72,12 @@
   .edit-btn:hover{color:var(--brass);border-color:var(--brass-dim);}
 
   .order-cell{display:flex;flex-direction:column;gap:2px;align-items:center;}
-  .order-btn{
-    background:none;border:1px solid var(--line-strong);color:var(--muted);
-    width:26px;height:22px;border-radius:5px;cursor:pointer;font-size:11px;
-    display:flex;align-items:center;justify-content:center;line-height:1;
-  }
+  .order-btn{background:none;border:1px solid var(--line-strong);color:var(--muted);width:26px;height:22px;border-radius:5px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1;}
   .order-btn:hover{color:var(--brass);border-color:var(--brass-dim);}
   .order-btn:disabled{opacity:0.25;cursor:not-allowed;}
 
   .row-actions{display:flex;gap:6px;flex-wrap:wrap;}
-
   .empty{text-align:center;padding:60px 20px;color:var(--faint);}
-  .empty p{font-size:14px;}
 </style>
 </head>
 <body>
@@ -116,53 +90,77 @@
     <a class="exit" href="index.html">View public page</a>
   </div>
 
-  <div class="upload-card">
-    <div class="drop">
-      <div class="icon" id="mode-icon">&#9660;</div>
-      <h2 id="mode-title">Paste a video link</h2>
-      <p>Google Drive share link, YouTube, or Vimeo. No file upload needed.</p>
-      <input class="linkfield" id="f-link" type="text" placeholder="https://drive.google.com/file/d/.../view?usp=sharing">
-      <div class="hint">Google Drive files must be shared as "Anyone with the link" to play for viewers.</div>
-    </div>
-
-    <div class="details">
-      <div class="field">
-        <label for="f-title">Title</label>
-        <input id="f-title" type="text" placeholder="e.g. Lesson 2.0 - Measurement">
-      </div>
-      <div class="field">
-        <label for="f-note">Description (optional)</label>
-        <textarea id="f-note" placeholder="What this session covers, readings, timestamps..."></textarea>
-      </div>
-    </div>
-
-    <div class="status" id="status"></div>
-    <div class="actions">
-      <button class="ghost" id="clear-btn">Clear</button>
-      <button class="primary" id="save-btn">Publish</button>
-    </div>
+  <div class="tabs">
+    <button id="tab-videos" class="tab-btn active">Videos / Sessions</button>
+    <button id="tab-notes" class="tab-btn">Notes</button>
   </div>
 
-  <div class="section-title">Published sessions (<span id="count">0</span>)</div>
-  <table id="table" style="display:none;">
-    <thead>
-      <tr><th style="width:56px;"></th><th style="width:110px;">Preview</th><th>Session</th><th style="width:100px;">Date</th><th style="width:120px;"></th></tr>
-    </thead>
-    <tbody id="table-body"></tbody>
-  </table>
-  <div class="empty" id="empty">
-    <p>Nothing published yet — paste a link above to add your first session.</p>
+  <!-- VIDEOS PANEL -->
+  <div id="panel-videos">
+    <div class="upload-card">
+      <div class="drop">
+        <div class="icon" id="mode-icon">&#9660;</div>
+        <h2 id="mode-title">Paste a video link</h2>
+        <p>Google Drive share link, YouTube, or Vimeo.</p>
+        <input class="linkfield" id="f-link" type="text" placeholder="https://drive.google.com/file/d/...">
+        <div class="hint">Google Drive files must be shared as "Anyone with the link".</div>
+      </div>
+
+      <div class="details">
+        <div class="field"><label for="f-title">Title</label><input id="f-title" type="text" placeholder="Lesson title"></div>
+        <div class="field"><label for="f-note">Description (optional)</label><textarea id="f-note" placeholder="What this session covers..."></textarea></div>
+      </div>
+
+      <div class="status" id="status"></div>
+      <div class="actions">
+        <button class="ghost" id="clear-btn">Clear</button>
+        <button class="primary" id="save-btn">Publish</button>
+      </div>
+    </div>
+
+    <div class="section-title">Published sessions (<span id="count">0</span>)</div>
+    <table id="table" style="display:none;">
+      <thead><tr><th style="width:56px;"></th><th style="width:110px;">Preview</th><th>Session</th><th style="width:100px;">Date</th><th style="width:140px;"></th></tr></thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="empty" id="empty"><p>Nothing published yet.</p></div>
+  </div>
+
+  <!-- NOTES PANEL -->
+  <div id="panel-notes" style="display:none;">
+    <div class="upload-card">
+      <div class="drop">
+        <div class="icon">&#9998;</div>
+        <h2>New Note</h2>
+        <p>Lesson name + full notes.</p>
+      </div>
+
+      <div class="details">
+        <div class="field"><label for="n-title">Lesson Title</label><input id="n-title" type="text" placeholder="e.g. Stoichiometry"></div>
+        <div class="field"><label for="n-desc">Brief Description</label><textarea id="n-desc" placeholder="Short summary..."></textarea></div>
+        <div class="field"><label for="n-content">Full Notes</label><textarea id="n-content" style="min-height:260px;" placeholder="Full content here..."></textarea></div>
+      </div>
+
+      <div class="status" id="notes-status"></div>
+      <div class="actions">
+        <button class="ghost" id="notes-clear-btn">Clear</button>
+        <button class="primary" id="notes-save-btn">Publish Note</button>
+      </div>
+    </div>
+
+    <div class="section-title">Published notes (<span id="notes-count">0</span>)</div>
+    <table id="notes-table" style="display:none;">
+      <thead><tr><th style="width:56px;"></th><th>Note</th><th style="width:100px;">Date</th><th style="width:140px;"></th></tr></thead>
+      <tbody id="notes-table-body"></tbody>
+    </table>
+    <div class="empty" id="notes-empty"><p>No notes yet.</p></div>
   </div>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import {
-    getFirestore, collection, query, orderBy, onSnapshot,
-    addDoc, updateDoc, deleteDoc, doc, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ---- YOUR FIREBASE CONFIG (same object as index.html) ----
   const firebaseConfig = {
     apiKey: "AIzaSyBqY1FRLKIju8-DS04DQBiT9HBL0pkVbiY",
     authDomain: "lecturesbydocd.firebaseapp.com",
@@ -171,7 +169,6 @@
     messagingSenderId: "259922970808",
     appId: "1:259922970808:web:ff73c6a6f8cc813fd78c4d"
   };
-  // ------------------------------------------------------
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -183,58 +180,61 @@
     const d = ts?.toDate ? ts.toDate() : new Date();
     return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
   }
-  function getThumbnail(link) {
-    let m = link.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/)([A-Za-z0-9_-]{6,})/);
-    if (m) return `https://img.youtube.com/vi/${m[1]}/mqdefault.jpg`;
-    return null;
-  }
 
+  // Tab Switching
+  const tabVideos = document.getElementById('tab-videos');
+  const tabNotes = document.getElementById('tab-notes');
+  const panelVideos = document.getElementById('panel-videos');
+  const panelNotes = document.getElementById('panel-notes');
+
+  tabVideos.addEventListener('click', () => {
+    tabVideos.classList.add('active'); tabNotes.classList.remove('active');
+    panelVideos.style.display = 'block'; panelNotes.style.display = 'none';
+  });
+  tabNotes.addEventListener('click', () => {
+    tabNotes.classList.add('active'); tabVideos.classList.remove('active');
+    panelVideos.style.display = 'none'; panelNotes.style.display = 'block';
+  });
+
+  // ====================== VIDEOS ======================
   const statusEl = document.getElementById('status');
   function showStatus(msg, isErr) {
-    statusEl.textContent = msg;
-    statusEl.className = 'status' + (isErr ? ' err' : '');
-    statusEl.style.display = 'block';
-    if (!isErr) setTimeout(() => { statusEl.style.display = 'none'; }, 2500);
+    statusEl.textContent = msg; statusEl.className = 'status' + (isErr ? ' err' : ''); statusEl.style.display = 'block';
+    if (!isErr) setTimeout(() => statusEl.style.display = 'none', 2500);
   }
 
   let editingId = null;
-  let currentList = []; // sorted array of {id, ...data}
+  let currentList = [];
 
   document.getElementById('save-btn').addEventListener('click', async () => {
     const title = document.getElementById('f-title').value.trim();
     const link = document.getElementById('f-link').value.trim();
     const note = document.getElementById('f-note').value.trim();
-    if (!title || !link) { showStatus('Title and link are required.', true); return; }
+    if (!title || !link) { showStatus('Title and link required.', true); return; }
 
     const btn = document.getElementById('save-btn');
     btn.disabled = true;
     try {
       if (editingId) {
         await updateDoc(doc(db, "lectures", editingId), { title, link, note });
-        showStatus('Changes saved.', false);
+        showStatus('Updated.', false);
       } else {
         const maxOrder = currentList.reduce((m, d) => Math.max(m, d.order ?? 0), 0);
         await addDoc(collection(db, "lectures"), { title, link, note, order: maxOrder + 1, date: serverTimestamp() });
-        showStatus('Published — now live on the public page.', false);
+        showStatus('Published.', false);
       }
       exitEditMode();
-    } catch (e) {
-      console.error(e);
-      showStatus('Could not save — check the Firebase config at the top of this file.', true);
-    }
+    } catch (e) { showStatus('Error saving.', true); }
     btn.disabled = false;
   });
 
-  function enterEditMode(id, l) {
+  function enterEditMode(id, data) {
     editingId = id;
-    document.getElementById('f-title').value = l.title || '';
-    document.getElementById('f-link').value = l.link || '';
-    document.getElementById('f-note').value = l.note || '';
+    document.getElementById('f-title').value = data.title || '';
+    document.getElementById('f-link').value = data.link || '';
+    document.getElementById('f-note').value = data.note || '';
     document.getElementById('save-btn').textContent = 'Save changes';
-    document.getElementById('clear-btn').textContent = 'Cancel edit';
-    document.getElementById('mode-title').textContent = 'Editing session';
-    document.getElementById('mode-icon').innerHTML = '&#9998;';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('clear-btn').textContent = 'Cancel';
   }
 
   function exitEditMode() {
@@ -244,106 +244,162 @@
     document.getElementById('f-note').value = '';
     document.getElementById('save-btn').textContent = 'Publish';
     document.getElementById('clear-btn').textContent = 'Clear';
-    document.getElementById('mode-title').textContent = 'Paste a video link';
-    document.getElementById('mode-icon').innerHTML = '&#9660;';
   }
-
   document.getElementById('clear-btn').addEventListener('click', exitEditMode);
 
-  async function moveItem(id, direction) {
-    const idx = currentList.findIndex(d => d.id === id);
-    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-    if (swapIdx < 0 || swapIdx >= currentList.length) return;
-    const a = currentList[idx], b = currentList[swapIdx];
-    const aOrder = a.order ?? 0, bOrder = b.order ?? 0;
-    try {
-      await Promise.all([
-        updateDoc(doc(db, "lectures", a.id), { order: bOrder }),
-        updateDoc(doc(db, "lectures", b.id), { order: aOrder })
-      ]);
-    } catch (e) {
-      console.error(e);
-      showStatus('Could not reorder — check the Firebase config.', true);
-    }
-  }
-
+  // Table
   const tableBody = document.getElementById('table-body');
   const table = document.getElementById('table');
   const emptyEl = document.getElementById('empty');
   const countEl = document.getElementById('count');
 
-  // Query by date so every doc always comes back (order field may not exist yet on old docs)
   const q = query(collection(db, "lectures"), orderBy("date", "desc"));
-  onSnapshot(q, async (snap) => {
+  onSnapshot(q, (snap) => {
     countEl.textContent = snap.size;
     if (snap.empty) { table.style.display = 'none'; emptyEl.style.display = 'block'; currentList = []; return; }
     table.style.display = 'table'; emptyEl.style.display = 'none';
 
-    let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-    // One-time backfill: assign an 'order' field to any doc missing one,
-    // based on its current date-desc position, so reordering has something to work with.
-    const missingOrder = docs.filter(d => d.order === undefined);
-    if (missingOrder.length > 0) {
-      const n = docs.length;
-      docs.forEach((d, i) => {
-        if (d.order === undefined) {
-          updateDoc(doc(db, "lectures", d.id), { order: n - i }).catch(() => {});
-        }
-      });
-    }
-
-    // Sort by order (descending = newest/top first); stable sort keeps date order for ties/missing values
-    docs.sort((a, b) => {
-      const oa = a.order, ob = b.order;
-      if (oa != null && ob != null) return ob - oa;
-      return 0;
-    });
-
+    let docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    docs.sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
     currentList = docs;
 
-    tableBody.innerHTML = docs.map((l, i) => {
-      const thumb = getThumbnail(l.link);
-      return `
-        <tr>
-          <td>
-            <div class="order-cell">
-              <button class="order-btn" data-move="up" data-id="${l.id}" ${i === 0 ? 'disabled' : ''}>&#9650;</button>
-              <button class="order-btn" data-move="down" data-id="${l.id}" ${i === docs.length - 1 ? 'disabled' : ''}>&#9660;</button>
-            </div>
-          </td>
-          <td><div class="thumb">${thumb ? `<img src="${thumb}" alt="">` : '&#9654;'}</div></td>
-          <td class="title-cell"><h4>${escapeHtml(l.title)}</h4><div class="sub">${l.note ? escapeHtml(l.note).slice(0,60) : 'No description'}</div></td>
-          <td class="date-cell">${formatDate(l.date)}</td>
-          <td>
-            <div class="row-actions">
-              <button class="del edit-btn" data-id="${l.id}" data-title="${escapeHtml(l.title)}" data-link="${escapeHtml(l.link)}" data-note="${escapeHtml(l.note || '')}">Edit</button>
-              <button class="del remove-btn" data-id="${l.id}">Remove</button>
-            </div>
-          </td>
-        </tr>
-      `;
-    }).join('');
+    tableBody.innerHTML = docs.map((l, i) => `
+      <tr>
+        <td><div class="order-cell">
+          <button class="order-btn" data-move="up" data-id="${l.id}" ${i===0?'disabled':''}>▲</button>
+          <button class="order-btn" data-move="down" data-id="${l.id}" ${i===docs.length-1?'disabled':''}>▼</button>
+        </div></td>
+        <td><div class="thumb">▶</div></td>
+        <td class="title-cell"><h4>${escapeHtml(l.title)}</h4><div class="sub">${escapeHtml(l.note||'').slice(0,60)}</div></td>
+        <td class="date-cell">${formatDate(l.date)}</td>
+        <td><div class="row-actions">
+          <button class="del edit-btn" data-id="${l.id}" data-title="${escapeHtml(l.title)}" data-link="${escapeHtml(l.link)}" data-note="${escapeHtml(l.note||'')}">Edit</button>
+          <button class="del remove-btn" data-id="${l.id}">Remove</button>
+        </div></td>
+      </tr>
+    `).join('');
 
-    tableBody.querySelectorAll('.order-btn').forEach(btn => {
-      btn.addEventListener('click', () => moveItem(btn.dataset.id, btn.dataset.move));
-    });
+    // Event listeners
+    tableBody.querySelectorAll('.order-btn').forEach(btn => btn.addEventListener('click', () => moveItem(btn.dataset.id, btn.dataset.move)));
     tableBody.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        enterEditMode(btn.dataset.id, { title: btn.dataset.title, link: btn.dataset.link, note: btn.dataset.note });
-      });
+      btn.addEventListener('click', () => enterEditMode(btn.dataset.id, {title: btn.dataset.title, link: btn.dataset.link, note: btn.dataset.note}));
     });
     tableBody.querySelectorAll('.remove-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!confirm('Remove this session?')) return;
-        if (btn.dataset.id === editingId) exitEditMode();
-        await deleteDoc(doc(db, "lectures", btn.dataset.id));
+        if (confirm('Remove?')) await deleteDoc(doc(db, "lectures", btn.dataset.id));
       });
     });
-  }, (err) => {
-    console.error(err);
-    showStatus('Could not load sessions — check the Firebase config.', true);
   });
+
+  async function moveItem(id, dir) {
+    // Reorder logic (same as before)
+    const idx = currentList.findIndex(d => d.id === id);
+    const swapIdx = dir === 'up' ? idx-1 : idx+1;
+    if (swapIdx < 0 || swapIdx >= currentList.length) return;
+    const a = currentList[idx], b = currentList[swapIdx];
+    await Promise.all([
+      updateDoc(doc(db, "lectures", a.id), {order: b.order ?? 0}),
+      updateDoc(doc(db, "lectures", b.id), {order: a.order ?? 0})
+    ]);
+  }
+
+  // ====================== NOTES ======================
+  const notesStatusEl = document.getElementById('notes-status');
+  function showNotesStatus(msg, isErr) {
+    notesStatusEl.textContent = msg; notesStatusEl.className = 'status' + (isErr ? ' err' : ''); notesStatusEl.style.display = 'block';
+    if (!isErr) setTimeout(() => notesStatusEl.style.display = 'none', 2500);
+  }
+
+  let editingNoteId = null;
+  let currentNotesList = [];
+
+  document.getElementById('notes-save-btn').addEventListener('click', async () => {
+    const title = document.getElementById('n-title').value.trim();
+    const description = document.getElementById('n-desc').value.trim();
+    const content = document.getElementById('n-content').value.trim();
+    if (!title || !content) { showNotesStatus('Title and content required.', true); return; }
+
+    const btn = document.getElementById('notes-save-btn');
+    btn.disabled = true;
+    try {
+      if (editingNoteId) {
+        await updateDoc(doc(db, "notes", editingNoteId), {title, description, content});
+        showNotesStatus('Updated.', false);
+      } else {
+        const maxOrder = currentNotesList.reduce((m,d)=>Math.max(m,d.order??0),0);
+        await addDoc(collection(db, "notes"), {title, description, content, order: maxOrder+1, date: serverTimestamp()});
+        showNotesStatus('Published.', false);
+      }
+      exitNoteEditMode();
+    } catch (e) { showNotesStatus('Error.', true); }
+    btn.disabled = false;
+  });
+
+  function enterNoteEditMode(id, data) {
+    editingNoteId = id;
+    document.getElementById('n-title').value = data.title || '';
+    document.getElementById('n-desc').value = data.description || '';
+    document.getElementById('n-content').value = data.content || '';
+    document.getElementById('notes-save-btn').textContent = 'Save changes';
+  }
+
+  function exitNoteEditMode() {
+    editingNoteId = null;
+    document.getElementById('n-title').value = '';
+    document.getElementById('n-desc').value = '';
+    document.getElementById('n-content').value = '';
+    document.getElementById('notes-save-btn').textContent = 'Publish Note';
+    document.getElementById('notes-clear-btn').textContent = 'Clear';
+  }
+  document.getElementById('notes-clear-btn').addEventListener('click', exitNoteEditMode);
+
+  // Notes table
+  const notesTableBody = document.getElementById('notes-table-body');
+  const notesTable = document.getElementById('notes-table');
+  const notesEmpty = document.getElementById('notes-empty');
+  const notesCount = document.getElementById('notes-count');
+
+  const notesQ = query(collection(db, "notes"), orderBy("date", "desc"));
+  onSnapshot(notesQ, (snap) => {
+    notesCount.textContent = snap.size;
+    if (snap.empty) { notesTable.style.display = 'none'; notesEmpty.style.display = 'block'; currentNotesList = []; return; }
+    notesTable.style.display = 'table'; notesEmpty.style.display = 'none';
+
+    let docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    docs.sort((a,b) => (b.order??0) - (a.order??0));
+    currentNotesList = docs;
+
+    notesTableBody.innerHTML = docs.map((n,i) => `
+      <tr>
+        <td><div class="order-cell">
+          <button class="order-btn" data-move="up" data-id="${n.id}" ${i===0?'disabled':''}>▲</button>
+          <button class="order-btn" data-move="down" data-id="${n.id}" ${i===docs.length-1?'disabled':''}>▼</button>
+        </div></td>
+        <td class="title-cell"><h4>${escapeHtml(n.title)}</h4><div class="sub">${escapeHtml(n.description||'').slice(0,60)}</div></td>
+        <td class="date-cell">${formatDate(n.date)}</td>
+        <td><div class="row-actions">
+          <button class="del edit-btn" data-id="${n.id}" data-title="${escapeHtml(n.title)}" data-desc="${escapeHtml(n.description||'')}" data-content="${escapeHtml(n.content||'')}">Edit</button>
+          <button class="del remove-btn" data-id="${n.id}">Remove</button>
+        </div></td>
+      </tr>
+    `).join('');
+
+    notesTableBody.querySelectorAll('.order-btn').forEach(btn => btn.addEventListener('click', () => moveNote(btn.dataset.id, btn.dataset.move)));
+    notesTableBody.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => enterNoteEditMode(btn.dataset.id, {title: btn.dataset.title, description: btn.dataset.desc, content: btn.dataset.content}));
+    });
+    notesTableBody.querySelectorAll('.remove-btn').forEach(btn => {
+      btn.addEventListener('click', async () => { if (confirm('Remove?')) await deleteDoc(doc(db, "notes", btn.dataset.id)); });
+    });
+  });
+
+  async function moveNote(id, dir) {
+    const idx = currentNotesList.findIndex(d => d.id === id);
+    const swapIdx = dir === 'up' ? idx-1 : idx+1;
+    if (swapIdx < 0 || swapIdx >= currentNotesList.length) return;
+    const a = currentNotesList[idx], b = currentNotesList[swapIdx];
+    await Promise.all([updateDoc(doc(db,"notes",a.id),{order: b.order??0}), updateDoc(doc(db,"notes",b.id),{order: a.order??0})]);
+  }
 </script>
 </body>
 </html>
