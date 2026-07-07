@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Notes — Oversimplified Sessions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#12151a; --card:#1b2028; --ink:#e9e7df; --muted:#8b93a1; --faint:#565f6e;
+    --brass:#c9a86b; --brass-dim:#8a7550; --line:rgba(233,231,223,0.08); --line-strong:rgba(233,231,223,0.16);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 24px 120px;}
+  a{color:inherit;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:var(--brass);text-transform:uppercase;margin-bottom:14px;}
+  h1{font-family:'JetBrains Mono',serif;font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 14px;letter-spacing:-0.01em;}
+  nav{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;margin-top:24px;}
+  nav a{margin-right:20px;color:var(--muted);text-decoration:none;}
+  nav a.active{color:var(--brass);}
+
+  .note-entry{border-bottom:1px solid var(--line);padding:28px 0;}
+  .note-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+  .note-title{font-family:'Fraunces',serif;font-size:21px;margin:0;}
+  .note-desc{color:var(--muted);margin:6px 0 12px;}
+  .toggle-btn{font-size:18px;color:var(--brass);transition:transform .3s;}
+  .note-content{display:none;padding-top:16px;line-height:1.75;white-space:pre-wrap;font-size:15.2px;color:var(--ink);}
+  .note-content.open{display:block;}
+
+  .empty{text-align:center;padding:80px 20px;color:var(--faint);}
+  .empty .glyph{font-size:28px;margin-bottom:14px;opacity:0.5;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Archive</div>
+    <h1>Notes</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="notes.html" class="active">Notes</a>
+    </nav>
+  </header>
+
+  <div id="notes-list"></div>
+  <div class="empty" id="empty" style="display:none;">
+    <div class="glyph">📝</div>
+    <p>No notes published yet.<br>Check back after adding some from the admin panel.</p>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqY1FRLKIju8-DS04DQBiT9HBL0pkVbiY",
+    authDomain: "lecturesbydocd.firebaseapp.com",
+    projectId: "lecturesbydocd",
+    storageBucket: "lecturesbydocd.firebasestorage.app",
+    messagingSenderId: "259922970808",
+    appId: "1:259922970808:web:ff73c6a6f8cc813fd78c4d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  const listEl = document.getElementById('notes-list');
+  const emptyEl = document.getElementById('empty');
+
+  const q = query(collection(db, "notes"), orderBy("date", "desc"));
+  onSnapshot(q, (snap) => {
+    if (snap.empty) {
+      listEl.innerHTML = '';
+      emptyEl.style.display = 'block';
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+
+    listEl.innerHTML = snap.docs.map(doc => {
+      const n = doc.data();
+      return `
+        <div class="note-entry">
+          <div class="note-header">
+            <div>
+              <div class="note-title">${escapeHtml(n.title)}</div>
+              ${n.description ? `<div class="note-desc">${escapeHtml(n.description)}</div>` : ''}
+            </div>
+            <span class="toggle-btn">▼</span>
+          </div>
+          <div class="note-content">${escapeHtml(n.content || 'No content')}</div>
+        </div>
+      `;
+    }).join('');
+
+    // Dropdown functionality
+    document.querySelectorAll('.note-header').forEach(header => {
+      header.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const btn = this.querySelector('.toggle-btn');
+        const isOpen = content.classList.contains('open');
+
+        // Close all others
+        document.querySelectorAll('.note-content').forEach(c => c.classList.remove('open'));
+        document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = '▼');
+
+        if (!isOpen) {
+          content.classList.add('open');
+          btn.textContent = '▲';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
