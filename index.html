@@ -11,11 +11,11 @@
     --brass:#c9a86b; --brass-dim:#8a7550; --line:rgba(233,231,223,0.08); --line-strong:rgba(233,231,223,0.16);
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',sans-serif;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:760px;margin:0 auto;padding:64px 24px 120px;}
   a{color:inherit;}
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:var(--brass);text-transform:uppercase;margin-bottom:14px;}
-  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 14px;letter-spacing:-0.01em;}
+  h1{font-family:'JetBrains Mono',serif;font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 14px;letter-spacing:-0.01em;}
   header{margin-bottom:56px;}
   header p{color:var(--muted);font-size:15px;line-height:1.6;max-width:46ch;margin:0;}
   .footlink{display:inline-block;margin-top:56px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);text-decoration:none;border-bottom:1px solid transparent;}
@@ -23,7 +23,7 @@
   .log{border-top:1px solid var(--line);}
   .entry{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:start;padding:22px 0;border-bottom:1px solid var(--line);}
   .num{font-family:'JetBrains Mono',monospace;color:var(--faint);font-size:13px;padding-top:3px;}
-  .entry .body h3{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0 0 4px;}
+  .entry .body h3{font-family:'JetBrains Mono',serif;font-weight:600;font-size:19px;margin:0 0 4px;}
   .entry .body a.link{color:var(--brass);text-decoration:none;font-size:14px;border-bottom:1px solid var(--brass-dim);}
   .entry .body a.link:hover{color:#d8b87e;}
   .entry .body .note{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.5;}
@@ -107,6 +107,18 @@
   }
   #chat-send:hover{background:#d8b87e;}
   #chat-send:disabled{opacity:0.5;cursor:not-allowed;}
+nav {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+nav a {
+  font-family: 'JetBrains Mono', monospace !important;
+  text-decoration: none;
+}
+
 </style>
 </head>
 <body>
@@ -115,6 +127,11 @@
     <div class="eyebrow">Archive — updated continuously</div>
     <h1>Oversimplified Sessions</h1>
     <p>All my oversimplified lectures, in one place.</p>
+    <nav style="margin-bottom: 24px;">
+  <a href="aboutus.html" style="margin-right: 15px; color: var(--muted);">About Us</a>
+  <a href="notes.html" style="color: var(--muted);">Notes</a>
+</nav>
+
   </header>
 
   <div class="log" id="log"></div>
@@ -151,7 +168,6 @@
   import { getFirestore, collection, query, orderBy, onSnapshot }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ---- PASTE YOUR FIREBASE CONFIG HERE (same object in admin.html) ----
   const firebaseConfig = {
     apiKey: "AIzaSyBqY1FRLKIju8-DS04DQBiT9HBL0pkVbiY",
     authDomain: "lecturesbydocd.firebaseapp.com",
@@ -160,7 +176,6 @@
     messagingSenderId: "259922970808",
     appId: "1:259922970808:web:ff73c6a6f8cc813fd78c4d"
   };
-  // -----------------------------------------------------------------
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
