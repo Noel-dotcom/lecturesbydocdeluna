@@ -25,11 +25,21 @@
     margin: 48px 0;
   }
 
-  .note-entry{border-bottom:1px solid var(--line);padding:28px 0;}
-  .note-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
-  .note-title{font-family:'Fraunces',serif;font-size:21px;margin:0;}
-  .note-desc{color:var(--muted);margin:6px 0 12px;}
-  .toggle-btn{font-size:18px;color:var(--brass);transition:transform .3s;}
+  .note-entry{
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 18px;
+    align-items: start;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .note-entry:last-child { border-bottom: none; }
+
+  .num{font-family:'JetBrains Mono',monospace;color:var(--faint);font-size:13px;padding-top:3px;}
+  .note-body h3{font-family:'Fraunces',serif;font-size:21px;margin:0 0 6px;}
+  .note-desc{color:var(--muted);margin-bottom:12px;}
+  .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);text-align:right;white-space:nowrap;padding-top:4px;}
+  .toggle-btn{font-size:18px;color:var(--brass);cursor:pointer;}
   .note-content{display:none;padding-top:16px;line-height:1.75;white-space:pre-wrap;font-size:15.2px;color:var(--ink);}
   .note-content.open{display:block;}
 
@@ -76,6 +86,11 @@
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
+  function formatDate(ts) {
+    const d = ts?.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
   const listEl = document.getElementById('notes-list');
   const emptyEl = document.getElementById('empty');
 
@@ -89,35 +104,42 @@
 
     emptyEl.style.display = 'none';
 
-    listEl.innerHTML = snap.docs.map(doc => {
-      const n = doc.data();
+    const docs = snap.docs.map(d => d.data());
+    docs.sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
+
+    listEl.innerHTML = docs.map((n, i) => {
+      const numStr = String(docs.length - i).padStart(2, '0');
       return `
         <div class="note-entry">
-          <div class="note-header">
-            <div>
-              <div class="note-title">${escapeHtml(n.title)}</div>
-              ${n.description ? `<div class="note-desc">${escapeHtml(n.description)}</div>` : ''}
-            </div>
-            <span class="toggle-btn">▼</span>
+          <div class="num">${numStr}</div>
+          <div class="note-body">
+            <h3>${escapeHtml(n.title)}</h3>
+            ${n.description ? `<div class="note-desc">${escapeHtml(n.description)}</div>` : ''}
+            <div class="note-content">${escapeHtml(n.content || 'No content')}</div>
           </div>
-          <div class="note-content">${escapeHtml(n.content || 'No content')}</div>
+          <div>
+            <div class="meta">${formatDate(n.date)}</div>
+            <span class="toggle-btn" style="display:block;margin-top:12px;">▼</span>
+          </div>
         </div>
       `;
     }).join('');
 
     // Dropdown functionality
-    document.querySelectorAll('.note-header').forEach(header => {
-      header.addEventListener('click', function() {
-        const content = this.nextElementSibling;
-        const btn = this.querySelector('.toggle-btn');
-        const isOpen = content.classList.contains('open');
+    document.querySelectorAll('.note-entry').forEach(entry => {
+      const header = entry.querySelector('.note-body');
+      const toggle = entry.querySelector('.toggle-btn');
+      const content = entry.querySelector('.note-content');
 
+      header.style.cursor = 'pointer';
+      header.addEventListener('click', () => {
+        const isOpen = content.classList.contains('open');
         document.querySelectorAll('.note-content').forEach(c => c.classList.remove('open'));
         document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = '▼');
 
         if (!isOpen) {
           content.classList.add('open');
-          btn.textContent = '▲';
+          toggle.textContent = '▲';
         }
       });
     });
