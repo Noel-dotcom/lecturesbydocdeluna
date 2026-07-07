@@ -17,7 +17,11 @@
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:var(--brass);text-transform:uppercase;margin-bottom:14px;}
   h1{font-family:'JetBrains Mono',serif;font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 14px;letter-spacing:-0.01em;}
   header{margin-bottom:56px;}
-  header p{color:var(--muted);font-size:15px;line-height:1.6;max-width:46ch;margin:0;}
+  header p{color:var(--muted);font-size:15px;line-height:1.6;max-width:46ch;margin:0 0 24px;}
+  nav{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;}
+  nav a{margin-right:20px;color:var(--muted);text-decoration:none;}
+  nav a.active{color:var(--brass);}
+
   .footlink{display:inline-block;margin-top:56px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);text-decoration:none;border-bottom:1px solid transparent;}
   .footlink:hover{color:var(--brass);border-color:var(--brass-dim);}
   .log{border-top:1px solid var(--line);}
@@ -107,18 +111,6 @@
   }
   #chat-send:hover{background:#d8b87e;}
   #chat-send:disabled{opacity:0.5;cursor:not-allowed;}
-nav {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-nav a {
-  font-family: 'JetBrains Mono', monospace !important;
-  text-decoration: none;
-}
-
 </style>
 </head>
 <body>
@@ -127,11 +119,12 @@ nav a {
     <div class="eyebrow">Archive — updated continuously</div>
     <h1>Oversimplified Sessions</h1>
     <p>All my oversimplified lectures, in one place.</p>
-    <nav style="margin-bottom: 24px;">
-  <a href="aboutus.html" style="margin-right: 15px; color: var(--muted);">About Us</a>
-  <a href="notes.html" style="color: var(--muted);">Notes</a>
-</nav>
-
+    
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="notes.html">Notes</a>
+    </nav>
   </header>
 
   <div class="log" id="log"></div>
@@ -181,26 +174,29 @@ nav a {
   const db = getFirestore(app);
 
   const lightbox = document.getElementById('lightbox');
-const lightboxFrame = document.getElementById('lightbox-frame');
-function openLightbox(url) {
-  lightboxFrame.innerHTML = `<iframe id="active-embed" src="${url}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-  lightbox.classList.add('open');
-  try {
-    if (lightbox.requestFullscreen) lightbox.requestFullscreen().catch(() => {});
-    else if (lightbox.webkitRequestFullscreen) lightbox.webkitRequestFullscreen();
-  } catch (e) { /* fullscreen not available, modal still works fine */ }
-}
-function closeLightbox() {
-  lightbox.classList.remove('open');
-  lightboxFrame.innerHTML = ''; // stop playback
-}
-document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement && lightbox.classList.contains('open')) closeLightbox();
-});
+  const lightboxFrame = document.getElementById('lightbox-frame');
 
-function getEmbedUrl(link) {
+  function openLightbox(url) {
+    lightboxFrame.innerHTML = `<iframe id="active-embed" src="${url}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    lightbox.classList.add('open');
+    try {
+      if (lightbox.requestFullscreen) lightbox.requestFullscreen().catch(() => {});
+      else if (lightbox.webkitRequestFullscreen) lightbox.webkitRequestFullscreen();
+    } catch (e) {}
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightboxFrame.innerHTML = '';
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && lightbox.classList.contains('open')) closeLightbox();
+  });
+
+  function getEmbedUrl(link) {
     let m = link.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
     if (m) return `https://drive.google.com/file/d/${m[1]}/preview`;
     m = link.match(/drive\.google\.com\/open\?id=([^&]+)/);
@@ -211,9 +207,11 @@ function getEmbedUrl(link) {
     if (m) return `https://player.vimeo.com/video/${m[1]}`;
     return null;
   }
+
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
+
   function formatDate(ts) {
     const d = ts?.toDate ? ts.toDate() : new Date(ts);
     return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
@@ -224,7 +222,11 @@ function getEmbedUrl(link) {
 
   const q = query(collection(db, "lectures"), orderBy("date", "desc"));
   onSnapshot(q, (snap) => {
-    if (snap.empty) { logEl.innerHTML = ''; emptyEl.style.display = 'block'; return; }
+    if (snap.empty) { 
+      logEl.innerHTML = ''; 
+      emptyEl.style.display = 'block'; 
+      return; 
+    }
     emptyEl.style.display = 'none';
     const docs = snap.docs.map(d => d.data());
     docs.sort((a, b) => {
@@ -270,8 +272,7 @@ function getEmbedUrl(link) {
     console.error(err);
   });
 
-  // ---- Chat widget ----
-  // Paste the URL your Cloudflare Worker gives you after deploying (e.g. https://your-worker.your-subdomain.workers.dev)
+  // Chat widget
   const WORKER_URL = "https://groqaichemistry.c15-1004-131.workers.dev/";
 
   const chatFab = document.getElementById('chat-fab');
