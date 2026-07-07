@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About Us — Oversimplified Sessions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  
+  :root{
+    --bg:#12151a; 
+    --card:#1b2028; 
+    --ink:#e9e7df; 
+    --muted:#8b93a1; 
+    --faint:#565f6e;
+    --brass:#c9a86b; 
+    --brass-dim:#8a7550; 
+    --line:rgba(233,231,223,0.08); 
+    --line-strong:rgba(233,231,223,0.16);
+  }
+  
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 24px 120px;}
+  
+  a{color:inherit;}
+  
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;color:var(--brass);text-transform:uppercase;margin-bottom:14px;}
+  h1{font-family:'JetBrains Mono',serif;font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.05;margin:0 0 14px;letter-spacing:-0.01em;}
+  h2{font-family:'JetBrains Mono',serif;font-weight:600;font-size:26px;margin:48px 0 20px;letter-spacing:-0.01em;}
+  
+  header{margin-bottom:56px;}
+  header p{color:var(--muted);font-size:15px;line-height:1.6;max-width:46ch;margin:0;}
+  
+  .divider {
+    border-top: 1px solid var(--line);
+    margin: 48px 0;
+  }
+  
+  .content p, .content li {
+    font-size:15.5px;
+    line-height:1.65;
+    max-width:58ch;
+  }
+  
+  .content a {
+    color:var(--brass);
+    text-decoration:none;
+    border-bottom:1px solid var(--brass-dim);
+  }
+  .content a:hover {color:#d8b87e;}
+  
+  .section{margin-bottom:72px;}
+  
+  .contact-info {
+    background:var(--card);
+    border:1px solid var(--line-strong);
+    border-radius:12px;
+    padding:32px;
+    margin-top:24px;
+  }
+  
+  nav {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 32px;
+  }
+  nav a {
+    font-family: 'JetBrains Mono', monospace !important;
+    text-decoration: none;
+    color: var(--muted);
+    margin-right: 20px;
+  }
+  nav a:hover { 
+    color: var(--brass); 
+  }
+  nav a.active {
+    color: var(--brass);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">About</div>
+    <h1>Oversimplified Sessions</h1>
+    <p>Learn more about us and what we do.</p>
+    
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="aboutus.html" class="active">About Us</a>
+      <a href="notes.html">Notes</a>
+    </nav>
+  </header>
+
+  <div class="divider"></div>
+
+  <div class="content">
+    <!-- ==================== DESCRIPTION SECTION ==================== -->
+    <div class="section">
+      <h2>Who We Are</h2>
+      <p>
+        Put your description here. Explain what Oversimplified Sessions is, your mission, 
+        teaching philosophy, or the story behind the project.
+      </p>
+      <p>
+        You can add as many paragraphs as you like. This area is fully flexible.
+      </p>
+    </div>
+
+    <!-- ==================== CONTACTS SECTION ==================== -->
+    <div class="section">
+      <h2>Get In Touch</h2>
+      <div class="contact-info">
+        <p><strong>Email:</strong> <a href="mailto:your@email.com">your@email.com</a></p>
+        <p><strong>YouTube:</strong> <a href="https://youtube.com/..." target="_blank">@yourchannel</a></p>
+        <p><strong>Discord:</strong> <a href="#" target="_blank">Join our community</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
