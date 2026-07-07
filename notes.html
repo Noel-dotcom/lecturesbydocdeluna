@@ -20,6 +20,11 @@
   nav a{margin-right:20px;color:var(--muted);text-decoration:none;}
   nav a.active{color:var(--brass);}
 
+  .divider {
+    border-top: 1px solid var(--line);
+    margin: 48px 0;
+  }
+
   .note-entry{border-bottom:1px solid var(--line);padding:28px 0;}
   .note-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
   .note-title{font-family:'Fraunces',serif;font-size:21px;margin:0;}
@@ -29,7 +34,6 @@
   .note-content.open{display:block;}
 
   .empty{text-align:center;padding:80px 20px;color:var(--faint);}
-  .empty .glyph{font-size:28px;margin-bottom:14px;opacity:0.5;}
 </style>
 </head>
 <body>
@@ -44,11 +48,11 @@
     </nav>
   </header>
 
+  <div class="divider"></div>
+
   <div id="notes-list"></div>
   <div class="empty" id="empty" style="display:none;">
-    <div class="glyph"></div>
-    <p>No notes published yet.<br>
-      </p>
+    <p>No notes published yet.</p>
   </div>
 </div>
 
@@ -108,7 +112,6 @@
         const btn = this.querySelector('.toggle-btn');
         const isOpen = content.classList.contains('open');
 
-        // Close all others
         document.querySelectorAll('.note-content').forEach(c => c.classList.remove('open'));
         document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = '▼');
 
