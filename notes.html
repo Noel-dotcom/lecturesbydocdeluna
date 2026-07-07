@@ -5,7 +5,7 @@
 <title>Notes — Oversimplified Sessions</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
   :root{
     --bg:#12151a; --card:#1b2028; --ink:#e9e7df; --muted:#8b93a1; --faint:#565f6e;
     --brass:#c9a86b; --brass-dim:#8a7550; --line:rgba(233,231,223,0.08); --line-strong:rgba(233,231,223,0.16);
@@ -36,7 +36,7 @@
   .note-entry:last-child { border-bottom: none; }
 
   .num{font-family:'JetBrains Mono',monospace;color:var(--faint);font-size:13px;padding-top:3px;}
-  .note-body h3{font-family:'Fraunces',serif;font-size:21px;margin:0 0 6px;}
+  .note-body h3{font-family:'JetBrains Mono',serif;font-weight:600;font-size:21px;margin:0 0 6px;}
   .note-desc{color:var(--muted);margin-bottom:12px;}
   .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);text-align:right;white-space:nowrap;padding-top:4px;}
   .toggle-btn{font-size:18px;color:var(--brass);cursor:pointer;}
@@ -117,9 +117,9 @@
             ${n.description ? `<div class="note-desc">${escapeHtml(n.description)}</div>` : ''}
             <div class="note-content">${escapeHtml(n.content || 'No content')}</div>
           </div>
-          <div>
+          <div style="text-align:right;">
             <div class="meta">${formatDate(n.date)}</div>
-            <span class="toggle-btn" style="display:block;margin-top:12px;">▼</span>
+            <span class="toggle-btn">▼</span>
           </div>
         </div>
       `;
@@ -127,19 +127,21 @@
 
     // Dropdown functionality
     document.querySelectorAll('.note-entry').forEach(entry => {
-      const header = entry.querySelector('.note-body');
-      const toggle = entry.querySelector('.toggle-btn');
       const content = entry.querySelector('.note-content');
+      const btn = entry.querySelector('.toggle-btn');
 
-      header.style.cursor = 'pointer';
-      header.addEventListener('click', () => {
+      entry.style.cursor = 'pointer';
+      entry.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') return;
+
         const isOpen = content.classList.contains('open');
+
         document.querySelectorAll('.note-content').forEach(c => c.classList.remove('open'));
         document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = '▼');
 
         if (!isOpen) {
           content.classList.add('open');
-          toggle.textContent = '▲';
+          btn.textContent = '▲';
         }
       });
     });
